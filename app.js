@@ -36,9 +36,38 @@ app.post('/create',(req, res) => {
   // 'INSERT INTO items(name) VALUE(?)',
   // [req.body.itemName]
   // (error, results)=>{
-  //   res.redirect('/index')
+  //   res.redirect('/index');
   //  }
   // );
+});
+
+app.post('/delete/:id',(req, res) => {
+  connection.query(
+    'DELETE FROM items WHERE id = ?',
+    [req.params.id],
+    (error, results) => {
+      res.redirect('/index');
+    }
+  );
+});
+
+app.get('/edit/:id', (req, res) => {
+  connection.query(
+    'SELECT * FROM items WHERE id = ?',
+    [req.params.id],
+    (error, results) => {
+      res.render('edit.ejs');
+    }
+  );
+});
+
+app.post('/update/:id', (req, res) => {
+  connection.query(
+    'UPDATE items SET name = ? WHERE id = ?',
+    [req.body.itemName, req.params.id],
+    (error, results) => {
+      res.redirect('/index');
+    })
 });
 
 app.listen(3000);
